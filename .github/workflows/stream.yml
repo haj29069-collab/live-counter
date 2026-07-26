@@ -1,0 +1,27 @@
+name: 24/7 Kick Subscriber Counter Stream
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 */6 * * *' # يعيد تشغيل السيرفر تلقائياً كل 6 ساعات لضمان استمراره للأبد
+
+jobs:
+  stream:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Install Tools
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ffmpeg xvfb chromium-browser
+
+    - name: Start Virtual Screen and Stream to Kick
+      run: |
+        Xvfb :99 -screen 0 1920x1080x24 &
+        export DISPLAY=:99
+        sleep 3
+        chromium-browser --no-sandbox --window-size=1920,1080 --kiosk "https://livecounts.io/youtube-live-subscriber-counter/UCqq5n-Oe-r1EEHI3yvhVJcA" &
+        sleep 5
+        ffmpeg -f x11grab -video_size 1920x1080 -i :99.0 -c:v libx264 -b:v 2500k -preset fast -pix_fmt yuv420p -f flv "rtmps://://kick.com{{ secrets.KICK_STREAM_KEY }}"
