@@ -26,7 +26,7 @@ jobs:
         sleep 3
         
         # 2. أتمتة فتح صفحة الشارت المباشر للبيتكوين ليعرض الرسم البياني المتحرك تلقائياً
-        chromium-browser --no-sandbox --disable-setuid-sandbox --disable-gpu --window-size=1920,1080 --force-device-scale-factor=2.0 --kiosk "https://livecounts.io/kick-live-follower-counter/pinta101" &
+        chromium-browser --no-sandbox --disable-setuid-sandbox --disable-gpu --window-size=1920,1080 --force-device-scale-factor=1.0 --kiosk "https://livecounts.io/kick-live-follower-counter/pinta101" &
         sleep 12
         
         # 3. توجيه البث بالصوت والصورة إلى خادم كيك الخاص بك بشكل برمي صحيح
