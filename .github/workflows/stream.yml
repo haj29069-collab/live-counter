@@ -22,7 +22,7 @@ jobs:
         export DISPLAY=:99
         sleep 3
         # زيادة الزووم إلى 1.6 لجعل الأرقام أضخم في العرض
-        chromium-browser --no-sandbox --disable-setuid-sandbox --disable-gpu --window-size=1920,1080 --force-device-scale-factor=1.6 --kiosk "https://livecounts.io/youtube-live-subscriber-counter/UCqq5n-Oe-r1EEHI3yvhVJcA" &
+        chromium-browser --no-sandbox --disable-setuid-sandbox --disable-gpu --window-size=1920,1080 --kiosk "https://livecounts.io/youtube-live-subscriber-counter/UCqq5n-Oe-r1EEHI3yvhVJcA" &
         # الانتظار 12 ثانية كاملة ليتلاشى إشعار المتصفح الأسود التلقائي (Exit full screen) قبل بدء لقطة البث
         sleep 12
         # تم ضبط أبعاد القص [crop=1000:600:460:340] لحذف الشريط العلوي الأبيض والإشعار الأسود تماماً، والتركيز على العداد فقط
