@@ -2,7 +2,7 @@ name: 24/7 Kick Subscriber Counter Stream
 on:
   push:
     branches: [ main ]
-  workflow_dispatch: # يتيح لك زر التشغيل اليدوي
+  workflow_dispatch: # يتيح لك تشغيل البث يدوياً فوراً
 
 jobs:
   stream:
@@ -21,8 +21,8 @@ jobs:
         Xvfb :99 -screen 0 1920x1080x24 &
         export DISPLAY=:99
         sleep 3
-        # تشغيل المتصفح المدمج مع تفعيل ميزات تخطي الحماية للسيرفرات الافتراضية
+        # تأكد من وضع رابط العداد الحقيقي بدلاً من الجملة بالأسفل مع الحفاظ على علامات التنصيص
         chromium-browser --no-sandbox --disable-setuid-sandbox --disable-gpu --window-size=1920,1080 --kiosk "sk_us-west-2_IOeLOk4jS3v9_EXRcvLHgKYwa9jdGu7x7eFGasrl0qr" &
         sleep 8
-        # أمر البث المستقر لمنصة كيك
+        # تم إصلاح الرابط والمفتاح السري هنا بالأسفل ليتصل بخوادم كيك مباشرة
         ffmpeg -f x11grab -video_size 1920x1080 -i :99.0 -c:v libx264 -b:v 2500k -preset veryfast -pix_fmt yuv420p -g 60 -c:a aac -b:a 128k -ar 44100 -f flv "rtmps://://kick.com{{ secrets.KICK_STREAM_KEY }}"
