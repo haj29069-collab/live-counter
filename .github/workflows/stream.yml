@@ -2,8 +2,7 @@ name: 24/7 Kick Subscriber Counter Stream
 on:
   push:
     branches: [ main ]
-  schedule:
-    - cron: '0 */6 * * *' # يعيد تشغيل السيرفر تلقائياً كل 6 ساعات لضمان استمراره للأبد
+  workflow_dispatch: # يتيح لك زر التشغيل اليدوي للتجربة فوراً
 
 jobs:
   stream:
@@ -12,16 +11,21 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3
 
-    - name: Install Tools
+    - name: Install Google Chrome and FFmpeg
       run: |
         sudo apt-get update
-        sudo apt-get install -y ffmpeg xvfb chromium-browser
+        # تثبيت متصفح كروم الرسمي الكامل بدلاً من كروميوم لحل مشاكل المواقع
+        wget https://google.com
+        sudo apt install ./google-chrome-stable_current_amd64.deb -y
+        sudo apt-get install -y ffmpeg xvfb
 
     - name: Start Virtual Screen and Stream to Kick
       run: |
         Xvfb :99 -screen 0 1920x1080x24 &
         export DISPLAY=:99
         sleep 3
-        chromium-browser --no-sandbox --window-size=1920,1080 --kiosk "https://livecounts.io/youtube-live-subscriber-counter/UCqq5n-Oe-r1EEHI3yvhVJcA" &
-        sleep 5
-        ffmpeg -f x11grab -video_size 1920x1080 -i :99.0 -c:v libx264 -b:v 2500k -preset fast -pix_fmt yuv420p -f flv "rtmps://://kick.com{{ secrets.KICK_STREAM_KEY }}"
+        # تشغيل كروم الرسمي في وضع ملء الشاشة مع تخطي الأمان للسيرفر
+        google-chrome --no-sandbox --disable-gpu --window-size=1920,1080 --kiosk "sk_us-west-2_IOeLOk4jS3v9_EXRcvLHgKYwa9jdGu7x7eFGasrl0qr" &
+        sleep 8
+        # إرسال البث مع تفعيل بروتوكول الـ rtmps الآمن وتثبيت جودة معينة تناسب كيك
+        ffmpeg -f x11grab -video_size 1920x1080 -i :99.0 -c:v libx264 -b:v 3000k -preset veryfast -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 60 -c:a aac -b:a 128k -ar 44100 -f flv "rtmps://://kick.com{{ secrets.KICK_STREAM_KEY }}"
