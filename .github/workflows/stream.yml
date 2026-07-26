@@ -1,8 +1,10 @@
-name: 24/7 Kick Subscriber Counter Stream
+name: 24/7 AI Automation Crypto Trading Stream
 on:
   push:
     branches: [ main ]
   workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *' # إعادة التشغيل التلقائي كل 6 ساعات لضمان البث للأبد
 
 jobs:
   stream:
@@ -16,14 +18,16 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y ffmpeg xvfb chromium-browser
 
-    - name: Start Virtual Screen and Stream to Kick
+    - name: Start Virtual Screen, Merge AI Audio, and Stream to Kick
       run: |
+        # 1. إنشاء الشاشة الافتراضية المخفية بالسيرفر
         Xvfb :99 -screen 0 1920x1080x24 &
         export DISPLAY=:99
         sleep 3
-        # زيادة الزووم إلى 1.6 لجعل الأرقام أضخم في العرض
-        chromium-browser --no-sandbox --disable-setuid-sandbox --disable-gpu --window-size=1920,1080 --kiosk "https://livecounts.io/youtube-live-subscriber-counter/UCqq5n-Oe-r1EEHI3yvhVJcA" &
-        # الانتظار 12 ثانية كاملة ليتلاشى إشعار المتصفح الأسود التلقائي (Exit full screen) قبل بدء لقطة البث
+        
+        # 2. أتمتة فتح صفحة الشارت المباشر للبيتكوين ليعرض الرسم البياني المتحرك تلقائياً
+        chromium-browser --no-sandbox --disable-setuid-sandbox --disable-gpu --window-size=1920,1080 --kiosk "https://tradingview.com" &
         sleep 12
-        # تم ضبط أبعاد القص [crop=1000:600:460:340] لحذف الشريط العلوي الأبيض والإشعار الأسود تماماً، والتركيز على العداد فقط
-        ffmpeg -f x11grab -video_size 1920x1080 -i :99.0 -vf "crop=1000:600:460:340,scale=1920:1080" -c:v libx264 -b:v 2500k -preset veryfast -pix_fmt yuv420p -g 60 -c:a aac -b:a 128k -ar 44100 -f flv "rtmps://fa723fc1b171.global-contribute.live-video.net/app/${{ secrets.KICK_STREAM_KEY }}"
+        
+        # 3. توجيه البث بالصوت والصورة إلى خادم كيك الخاص بك بشكل برمي صحيح
+        ffmpeg -f x11grab -video_size 1920x1080 -i :99.0 -stream_loop -1 -i trading-music.mp3 -c:v libx264 -b:v 2800k -preset veryfast -pix_fmt yuv420p -g 60 -c:a aac -b:a 128k -ar 44100 -f flv "rtmps://fa723fc1b171.global-contribute.live-video.net/app/${{ secrets.KICK_STREAM_KEY }}"
