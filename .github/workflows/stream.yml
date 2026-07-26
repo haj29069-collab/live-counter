@@ -25,4 +25,4 @@ jobs:
         chromium-browser --no-sandbox --disable-setuid-sandbox --disable-gpu --window-size=1920,1080 --kiosk "https://livecounts.io/youtube-live-subscriber-counter/UCqq5n-Oe-r1EEHI3yvhVJcA" &
         sleep 8
         # تم إصلاح رابط الإرسال الرسمي لكيك واستدعاء المفتاح السري الآمن بشكل برمي سليم
-        ffmpeg -f x11grab -video_size 1920x1080 -i :99.0 -c:v libx264 -b:v 2500k -preset veryfast -pix_fmt yuv420p -g 60 -c:a aac -b:a 128k -ar 44100 -f flv "rtmps://://kick.com{{ secrets.KICK_STREAM_KEY }}"
+        ffmpeg -f x11grab -video_size 1920x1080 -i :99.0 -c:v libx264 -b:v 2500k -preset veryfast -pix_fmt yuv420p -g 60 -c:a aac -b:a 128k -ar 44100 -f flv "rtmps://fa723fc1b171.global-contribute.live-video.net/"
